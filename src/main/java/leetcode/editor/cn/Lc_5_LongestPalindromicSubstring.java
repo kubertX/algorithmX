@@ -15,11 +15,13 @@ class Solution {
         int max = 0;
         String ans = "";
         for (int i = 0;i< s.length();i++){
+            // 当前为中心
             String s1 = longestPalindrome(s, i, i);
             if(s1.length() > max){
                 ans = s1;
                 max = s1.length();
             }
+            // 左右为中心
             String s2 = longestPalindrome(s, i, i+1);
             if(s2.length() > max){
                 ans = s2;
