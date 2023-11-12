@@ -3,9 +3,10 @@ package leetcode.editor.cn;
 
 public class Lc_328_OddEvenLinkedList{
     public static void main(String[] args) {
-    
+        ListNode listNode = LCUtils.build(new int[]{1, 8, 3, 6, 5, 4});
         Solution solution = new Lc_328_OddEvenLinkedList()
                             .new Solution();
+        solution.oddEvenList(listNode);
     }
 
 
@@ -36,7 +37,7 @@ class Solution {
             odd = odd.next;
 
             even.next = odd.next;
-            even = odd.next;
+            even = even.next;
         }
         odd.next = evenHead;
         return head;
