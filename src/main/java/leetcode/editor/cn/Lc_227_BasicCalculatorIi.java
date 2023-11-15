@@ -10,7 +10,7 @@ public class Lc_227_BasicCalculatorIi{
     
         Solution solution = new Lc_227_BasicCalculatorIi()
                             .new Solution();
-        String s = "3+2*2";
+        String s = " 3/2 ";
         solution.calculate(s);
     }
 
@@ -18,62 +18,41 @@ public class Lc_227_BasicCalculatorIi{
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int calculate(String s) {
-        Map<Character,Integer> signLevel = new HashMap<>();
-        signLevel.put('+',1);
-        signLevel.put('-',1);
-        signLevel.put('*',2);
-        signLevel.put('/',2);
-        Stack<Integer> num = new Stack<>();
-        Stack<Character> sign = new Stack<>();
-        int sum = 0;
-
-        // 解题关键：运算符栈内运算符比当前运算符优先级高时，才运算
-        for (char c : s.toCharArray()) {
-            if(' ' == c) {
-                continue;
+        Stack<Integer> stack = new Stack<>();
+        int num = 0;
+        char sign = '+';
+        for (int i =0;i < s.length();i++){
+            char c = s.charAt(i);
+            // 当前字符是数字字符
+            if(Character.isDigit(c)){
+                num = num*10 + (c - '0');
             }
-            if('0' <= c && c <= '9'){
-                sum = sum*10 + c -'0';
-            }else {
-                while (!sign.isEmpty() && signLevel.get(sign.peek()) - signLevel.get(c) >= 0){
-                    // 栈内运算符比当前运算符 大于或等于
-                    int v1 = num.pop();
-                    int v2 = num.pop();
-                    char preSign = sign.pop();
-                    if(preSign == '+'){
-                        v2 += v1;
-                    }else if (preSign == '-'){
-                        v2 -= v1;
-                    }else if(preSign == '*'){
-                        v2*= v1;
-                    }else {
-                        v2/= v1;
-                    }
-                    num.push(v2);
+            // 非数字 或者 到达最后一个字符，运算后进栈
+            if((!Character.isDigit(c) && c != ' ' )|| i == s.length()-1){
+                // 计算上一个字符运算情况
+                // + - 字符直接进栈，乘除 取出前一个数字 计算后进栈
+                if(sign == '+'){
+                    stack.push(num);
+                }else if(sign == '-'){
+                    stack.push(-num);
+                }else if(sign == '*'){
+                    int pre = stack.pop();
+                    stack.push(pre * num);
+                }else if(sign == '/'){
+                    int pre = stack.pop();
+                    stack.push(pre/num);
                 }
-                // 进栈
-                num.push(sum);
-                sign.push(c);
-                sum = 0;
+
+                //
+                sign = c;
+                num = 0;
             }
         }
-        int target = 0;
-        if (!sign.isEmpty()){
-            int v1 = num.pop();
-            int v2 = num.pop();
-            char preSign = sign.pop();
-            if(preSign == '+'){
-                v2 += v1;
-            }else if (preSign == '-'){
-                v2 -= v1;
-            }else if(preSign == '*'){
-                v2*= v1;
-            }else {
-                v2/= v1;
-            }
-            target += v2;
+        int res = 0;
+        while (!stack.isEmpty()){
+            res += stack.pop();
         }
-        return target;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
