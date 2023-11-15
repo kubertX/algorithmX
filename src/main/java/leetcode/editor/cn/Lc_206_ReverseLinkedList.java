@@ -23,10 +23,24 @@ public class Lc_206_ReverseLinkedList{
  */
 class Solution {
 
+
+    public ListNode reverseList(ListNode head) {
+
+        ListNode cur = head;
+        ListNode pre = null;
+        while (cur != null){
+            ListNode tmp = cur;
+            cur = cur.next;
+            tmp.next = pre;
+            pre = tmp;
+        }
+        return pre;
+    }
+
     // 1 2 3 4 5
     // 1 2 3 4
     //     5
-    public ListNode reverseList(ListNode head) {
+    public ListNode reverseList1(ListNode head) {
         if(head == null || head.next == null){
             return head;
         }
